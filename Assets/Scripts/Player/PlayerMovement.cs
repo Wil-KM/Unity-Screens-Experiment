@@ -39,8 +39,8 @@ public class PlayerMovement : MonoBehaviour
         if (groundedPlayer && playerVelocity.y < 0)
             playerVelocity.y = 0f;
 
-        // Get movement direction based on arrow keys, and move player in that direction
-        Vector3 move = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
+        // Get movement direction based on arrow keys, and move player in that direction, clamp magnitude so diagonal movement isn't faster than normal
+        Vector3 move = Vector3.ClampMagnitude(Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward, 1);
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         // If on the floor and we jump, add to y velocity
