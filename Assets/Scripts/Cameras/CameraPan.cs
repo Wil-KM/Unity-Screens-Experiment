@@ -12,7 +12,8 @@ public class CameraPan : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        angle = Random.Range(-maxAngle, maxAngle);
+        transform.Rotate(new Vector3(0f, angle, 0f));
     }
 
     // Update is called once per frame
