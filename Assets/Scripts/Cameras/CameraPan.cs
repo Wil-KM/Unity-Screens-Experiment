@@ -6,8 +6,8 @@ public class CameraPan : MonoBehaviour
 {
     private float panSpeed = 10.0f;
     private float maxAngle = 30.0f;
-    private int dir = 1;
-    private float angle;
+    public int dir = 1;
+    public float angle;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +24,9 @@ public class CameraPan : MonoBehaviour
         transform.Rotate(new Vector3(0f, delta, 0f));
         angle += delta;
 
-        if (angle > maxAngle || angle < -maxAngle)
-            dir *= -1;
+        if (angle > maxAngle)
+            dir = -1;
+        else if (angle < -maxAngle)
+            dir = 1;
     }
 }
