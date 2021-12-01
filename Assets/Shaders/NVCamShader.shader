@@ -16,7 +16,6 @@ Shader "Custom/NVCamShader"
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
-        Cull Off
     
         // Pass for GPU, main code goes in here
         Pass
