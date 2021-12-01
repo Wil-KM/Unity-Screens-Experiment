@@ -4,6 +4,12 @@ Shader "Custom/NVCamShader"
     {
         // "Global variables"
         _MainTex ("Texture", 2D) = "white" {}
+        [HideInInspector]
+        _Tint ("ColourTint", Color) = (0, 0.5, 0, 1.0)
+        _Static ("Static Texture", 2D) = "white" {}
+        _Noise ("Noise Texture", 2D) = "white" {}
+        _Amplitude ("Amplitude", float) = 0
+        _Chunkiness ("Chunkiness", float) = 0
         _AspectRatio("Aspect Ratio X/Y", float) = 1
     }
     SubShader
@@ -43,6 +49,11 @@ Shader "Custom/NVCamShader"
 			};
             
             sampler2D _MainTex;
+            fixed4 _Tint;
+            sampler2D _Static;
+            sampler2D _Noise;
+            float _Amplitude;
+            float _Chunkiness;
             float _AspectRatio;
 
             // Vertex function, converts polygons to pixels
@@ -70,13 +81,21 @@ Shader "Custom/NVCamShader"
             fixed4 frag (v2f i) : SV_Target
             {
                 // Holds the new colour value for the pixel
-                float4 col;
+                fixed4 col;
 
                 // Assign the colour based on transformed values of the pixel's original colour
                 col.a = tex2D(_MainTex, i.uv).a;
-                col.r = 0;//tex2D(_MainTex, screenSpaceUV).r / 2;
-                col.g = tex2D(_MainTex, i.uv).g / 2;
-                col.b = 0;//tex2D(_MainTex, screenSpaceUV).b / 2;
+                col.r = tex2D(_MainTex, i.uv).r;
+                col.g = tex2D(_MainTex, i.uv).g;
+                col.b = tex2D(_MainTex, i.uv).b;
+
+                float random = tex2D(_Noise, _Time).r;
+                float2 noiseCoords;
+
+                noiseCoords.x = i.uv.x + random * 5;
+                noiseCoords.y = i.uv.y - random * 3;
+
+                col *= _Tint * Luminance(col) * (1 - tex2D(_Static, noiseCoords * _Chunkiness).r  * _Amplitude);
 
                 return col;
             }
