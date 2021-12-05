@@ -4,12 +4,10 @@ Shader "Custom/NVCamShader"
     {
         // "Global variables"
         _MainTex ("Texture", 2D) = "white" {}
-        [HideInInspector]
-        _Tint ("ColourTint", Color) = (0, 0.5, 0, 1.0)
         _Static ("Static Texture", 2D) = "white" {}
         _Noise ("Noise Texture", 2D) = "white" {}
-        _Amplitude ("Amplitude", float) = 0
-        _Chunkiness ("Chunkiness", float) = 0
+        _Amplitude ("Amplitude", float) = 0.6
+        _Smoothness ("Smoothness", float) = 1
         _AspectRatio("Aspect Ratio X/Y", float) = 1
     }
     SubShader
@@ -52,7 +50,7 @@ Shader "Custom/NVCamShader"
             sampler2D _Static;
             sampler2D _Noise;
             float _Amplitude;
-            float _Chunkiness;
+            float _Smoothness;
             float _AspectRatio;
 
             // Vertex function, converts polygons to pixels
@@ -70,7 +68,7 @@ Shader "Custom/NVCamShader"
                 }
                 else
                 {
-                    o.uv.x /= _AspectRatio;
+                    o.uv.x *= _AspectRatio;
                 }
 
                 return o;
@@ -79,24 +77,13 @@ Shader "Custom/NVCamShader"
             // Fragment funtion, converts pixels to colours
             fixed4 frag (v2f i) : SV_Target
             {
-                // Holds the new colour value for the pixel
-                fixed4 col;
-
-                // Assign the colour based on transformed values of the pixel's original colour
-                col.a = tex2D(_MainTex, i.uv).a;
-                col.r = tex2D(_MainTex, i.uv).r;
-                col.g = tex2D(_MainTex, i.uv).g;
-                col.b = tex2D(_MainTex, i.uv).b;
+                fixed4 lum = Luminance(tex2D(_MainTex, i.uv));
+                fixed4 tint = fixed4(0, 0.75, 0, 1);
 
                 float random = tex2D(_Noise, _Time).r;
-                float2 noiseCoords;
+                float2 noiseCoords = i.uv.xy + random * 8;
 
-                noiseCoords.x = i.uv.x + random * 5;
-                noiseCoords.y = i.uv.y - random * 3;
-
-                col *= _Tint * Luminance(col) * (1 - tex2D(_Static, noiseCoords * _Chunkiness).r  * _Amplitude);
-
-                return col;
+                return tint * lum * lum * (1 - tex2D(_Static, noiseCoords * _Smoothness).r  * _Amplitude);
             }
             ENDHLSL
         }
