@@ -120,7 +120,7 @@ Shader "Custom/OldTVShader"
                     )
                 )
                 {
-                    col *= 1 - _Line1Darkness;
+                    return col * (1 - _Line1Darkness);
                 }
 
                 lineStart = (_Line2Speed * _Time) % _Line2Travel;
@@ -144,7 +144,7 @@ Shader "Custom/OldTVShader"
                     )
                 )
                 {
-                    col *= 1 - _Line2Darkness;
+                    return col * (1 - _Line2Darkness);
                 }
 
                 return col;
