@@ -8,14 +8,14 @@ Shader "Custom/OldTVShader"
         _Noise ("Noise Texture", 2D) = "white" {}
         _Amplitude ("Amplitude", float) = 1
         _Smoothness ("Smoothness", float) = 1
-        _Line1Width ("Line 1 Width", float) = 0
-        _Line1Speed ("Line 1 Speed", float) = 0
-        _Line1Travel ("Line 1 Travel", float) = 0
-        _Line1Darkness ("Line 1 Darkness", float) = 0
-        _Line2Width ("Line 2 Width", float) = 0
-        _Line2Speed ("Line 2 Speed", float) = 0
-        _Line2Travel ("Line 2 Travel", float) = 0
-        _Line2Darkness ("Line 2 Darkness", float) = 0
+        _Line1Width ("Line 1 Width", float) = 0.1
+        _Line1Speed ("Line 1 Speed", float) = 300
+        _Line1Travel ("Line 1 Travel", float) = 1
+        _Line1Darkness ("Line 1 Darkness", float) = 0.3
+        _Line2Width ("Line 2 Width", float) = 0.2
+        _Line2Speed ("Line 2 Speed", float) = 5
+        _Line2Travel ("Line 2 Travel", float) = 4
+        _Line2Darkness ("Line 2 Darkness", float) = 0.5
         _AspectRatio("Aspect Ratio X/Y", float) = 1
     }
     SubShader
